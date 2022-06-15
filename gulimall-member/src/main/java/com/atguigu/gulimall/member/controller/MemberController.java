@@ -3,12 +3,9 @@ package com.atguigu.gulimall.member.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.atguigu.gulimall.member.feign.CounponFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.atguigu.gulimall.member.entity.MemberEntity;
 import com.atguigu.gulimall.member.service.MemberService;
@@ -29,6 +26,20 @@ import com.atguigu.common.utils.R;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private CounponFeignService counponFeignService;
+    /**
+     * 测试远程调用接口
+     */
+    @GetMapping("/test")
+    public R test(){
+        MemberEntity memberEntity=new MemberEntity();
+        memberEntity.setNickname("阿杰");
+        //远程调用
+        R r=counponFeignService.memberCoupon();
+        return R.ok().put("member",memberEntity).put("coupon",r.get("list"));
+    }
+
 
     /**
      * 列表
